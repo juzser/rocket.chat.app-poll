@@ -104,7 +104,7 @@ export class PollrApp extends App implements IUIKitInteractionHandler {
                             persistence,
                             modify,
                             options: pollData.options.length,
-                            pollData
+                            pollData,
                         });
                         return context.getInteractionResponder().openModalViewResponse(modal);
                     } catch (e) {
