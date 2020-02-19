@@ -7,17 +7,21 @@ import { buildVoters } from './buildVoters';
 export function createPollBlocks(block: BlockBuilder, question: string, options: Array<any>, poll: IPoll, showNames: boolean) {
     block.addSectionBlock({
         text: block.newPlainTextObject(question),
-        ...!poll.finished && {
-            accessory: {
-                type: BlockElementType.OVERFLOW_MENU,
-                actionId: 'finish',
-                options: [
-                    {
+        accessory: {
+            type: BlockElementType.OVERFLOW_MENU,
+            actionId: 'extraOptions',
+            options: [
+                {
+                    text: block.newPlainTextObject('Duplicate'),
+                    value: 'duplicate',
+                },
+                ...(!poll.finished
+                    ? [{
                         text: block.newPlainTextObject('Finish poll'),
                         value: 'finish',
-                    },
-                ],
-            },
+                    }]
+                    : []),
+            ],
         },
     });
 

@@ -1,15 +1,15 @@
 {
     "id": "c33fa1a6-68a7-491e-bf49-9d7b99671c48",
-    "version": "2.0.0",
+    "version": "1.0.0",
     "requiredApiVersion": "^1.12.0",
     "iconFile": "icon.png",
     "author": {
-        "name": "Diego Sampaio",
-        "homepage": "https://github.com/sampaiodiego/rocket.chat.app-poll",
-        "support": "https://github.com/sampaiodiego/rocket.chat.app-poll"
+        "name": "JuzSer",
+        "homepage": "https://github.com/JuzSer/rocket.chat.app-poll",
+        "support": "https://github.com/JuzSer/rocket.chat.app-poll"
     },
-    "name": "Poll",
-    "nameSlug": "poll",
+    "name": "Pollr",
+    "nameSlug": "pollr",
     "classFile": "PollApp.ts",
-    "description": "A simple app to create polls on Rocket.Chat. Use the slash command: /poll [Question?]"
+    "description": "Use the slash command: /pollr [Question?]"
 }

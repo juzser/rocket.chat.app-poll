@@ -7,7 +7,7 @@ import {
     IRead,
 } from '@rocket.chat/apps-engine/definition/accessors';
 import { App } from '@rocket.chat/apps-engine/definition/App';
-import { IAppInfo } from '@rocket.chat/apps-engine/definition/metadata';
+import { IAppInfo, RocketChatAssociationRecord, RocketChatAssociationModel } from '@rocket.chat/apps-engine/definition/metadata';
 import { SettingType } from '@rocket.chat/apps-engine/definition/settings';
 import {
     IUIKitInteractionHandler,
@@ -20,6 +20,8 @@ import { createPollModal } from './src/lib/createPollModal';
 import { finishPollMessage } from './src/lib/finishPollMessage';
 import { votePoll } from './src/lib/votePoll';
 import { PollCommand } from './src/PollCommand';
+import { IRoom } from '@rocket.chat/apps-engine/definition/rooms';
+import { getPoll } from './src/lib/getPoll';
 
 export class PollApp extends App implements IUIKitInteractionHandler {
 
@@ -90,30 +92,67 @@ export class PollApp extends App implements IUIKitInteractionHandler {
                 return context.getInteractionResponder().updateModalViewResponse(modal);
             }
 
-            case 'finish': {
-                try {
-                    await finishPollMessage({ data, read, persistence, modify });
-                } catch (e) {
+            case 'extraOptions': {
+                if (data.value === 'duplicate') {
+                    try {
+                        const msgId = data.message ? data.message.id : '';
+                        const pollData = await getPoll(String(msgId), read);
 
-                    const { room } = context.getInteractionData();
-                    const errorMessage = modify
-                         .getCreator()
-                         .startMessage()
-                         .setSender(context.getInteractionData().user)
-                         .setText(e.message)
-                         .setUsernameAlias('Poll');
+                        const modal = await createPollModal({
+                            question: pollData.question,
+                            data,
+                            persistence,
+                            modify,
+                            options: pollData.options.length,
+                            pollData
+                        });
+                        return context.getInteractionResponder().openModalViewResponse(modal);
+                    } catch (e) {
+                        const { room } = context.getInteractionData();
+                        const errorMessage = modify
+                             .getCreator()
+                             .startMessage()
+                             .setSender(context.getInteractionData().user)
+                             .setText(e.message)
+                             .setUsernameAlias('Poll');
 
-                    if (room) {
-                            errorMessage.setRoom(room);
+                        if (room) {
+                                errorMessage.setRoom(room);
+                        }
+                        modify
+                             .getNotifier()
+                             .notifyUser(
+                                 context.getInteractionData().user,
+                                 errorMessage.getMessage(),
+                             );
                     }
-                    modify
-                         .getNotifier()
-                         .notifyUser(
-                             context.getInteractionData().user,
-                             errorMessage.getMessage(),
-                         );
+                }
+
+                if (data.value === 'finish') {
+                    try {
+                        await finishPollMessage({ data, read, persistence, modify });
+                    } catch (e) {
+                        const { room } = context.getInteractionData();
+                        const errorMessage = modify
+                             .getCreator()
+                             .startMessage()
+                             .setSender(context.getInteractionData().user)
+                             .setText(e.message)
+                             .setUsernameAlias('Poll');
+
+                        if (room) {
+                                errorMessage.setRoom(room);
+                        }
+                        modify
+                             .getNotifier()
+                             .notifyUser(
+                                 context.getInteractionData().user,
+                                 errorMessage.getMessage(),
+                             );
+                    }
                 }
             }
+
         }
 
         return {

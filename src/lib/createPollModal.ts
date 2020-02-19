@@ -2,13 +2,15 @@ import { IModify, IPersistence } from '@rocket.chat/apps-engine/definition/acces
 import { RocketChatAssociationModel, RocketChatAssociationRecord } from '@rocket.chat/apps-engine/definition/metadata';
 import { IUIKitModalViewParam } from '@rocket.chat/apps-engine/definition/uikit/UIKitInteractionResponder';
 
+import { IPoll } from './../IPoll';
 import { uuid } from './uuid';
 
-export async function createPollModal({ id = '', question, persistence, data, modify, options = 2 }: {
+export async function createPollModal({ id = '', question, persistence, data, pollData, modify, options = 2 }: {
     id?: string,
     question?: string,
     persistence: IPersistence,
     data,
+    pollData?: IPoll,
     modify: IModify,
     options?: number,
 }): Promise<IUIKitModalViewParam> {
@@ -26,12 +28,15 @@ export async function createPollModal({ id = '', question, persistence, data, mo
     .addDividerBlock();
 
     for (let i = 0; i < options; i++) {
+        const optionValue = pollData ? pollData.options[i] : undefined;
+
         block.addInputBlock({
             blockId: 'poll',
             optional: true,
             element: block.newPlainTextInputElement({
                 actionId: `option-${i}`,
                 placeholder: block.newPlainTextObject('Insert an option'),
+                initialValue: optionValue,
             }),
             label: block.newPlainTextObject(''),
         });
@@ -44,7 +49,7 @@ export async function createPollModal({ id = '', question, persistence, data, mo
                 block.newStaticSelectElement({
                     placeholder: block.newPlainTextObject('Multiple choices'),
                     actionId: 'mode',
-                    initialValue: 'multiple',
+                    initialValue: pollData && pollData.singleChoice ? 'single' : 'multiple',
                     options: [
                         {
                             text: block.newPlainTextObject('Multiple choices'),
@@ -64,7 +69,7 @@ export async function createPollModal({ id = '', question, persistence, data, mo
                 block.newStaticSelectElement({
                     placeholder: block.newPlainTextObject('Open vote'),
                     actionId: 'visibility',
-                    initialValue: 'open',
+                    initialValue: pollData && pollData.confidential ? 'confidential' : 'open',
                     options: [
                         {
                             text: block.newPlainTextObject('Open vote'),

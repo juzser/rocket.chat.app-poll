@@ -3,8 +3,7 @@ import { ISlashCommand, SlashCommandContext } from '@rocket.chat/apps-engine/def
 import { createPollModal } from './lib/createPollModal';
 
 export class PollCommand implements ISlashCommand {
-
-    public command = 'poll';
+    public command = 'pollr';
     public i18nParamsExample = 'params_example';
     public i18nDescription = 'cmd_description';
     public providesPreview = false;
