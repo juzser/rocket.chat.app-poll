@@ -1,15 +1,15 @@
 {
-    "id": "c33fa1a6-68a7-491e-bf49-9d7b99671c48",
-    "version": "1.0.0",
-    "requiredApiVersion": "^1.12.0",
+    "id": "fd515445-36b5-4f7a-8089-7dec041d056b",
+    "version": "0.0.1",
+    "requiredApiVersion": "^1.4.0",
     "iconFile": "icon.png",
     "author": {
-        "name": "JuzSer",
+        "name": "Ser",
         "homepage": "https://github.com/JuzSer/rocket.chat.app-poll",
         "support": "https://github.com/JuzSer/rocket.chat.app-poll"
     },
     "name": "Pollr",
     "nameSlug": "pollr",
-    "classFile": "PollApp.ts",
+    "classFile": "PollrApp.ts",
     "description": "Use the slash command: /pollr [Question?]"
 }
