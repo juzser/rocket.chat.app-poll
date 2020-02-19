@@ -9,7 +9,7 @@
         "support": "https://github.com/JuzSer/rocket.chat.app-poll"
     },
     "name": "Pollr",
-    "nameSlug": "pollr",
+    "nameSlug": "pollr-app",
     "classFile": "PollrApp.ts",
     "description": "Use the slash command: /pollr [Question?]"
 }
