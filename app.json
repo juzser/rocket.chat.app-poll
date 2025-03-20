@@ -1,0 +1,16 @@
+{
+    "id": "db700464-b131-4004-9fd2-9675d13b9747",
+    "version": "0.0.1",
+    "requiredApiVersion": "^1.44.0",
+    "iconFile": "icon.png",
+    "author": {
+        "name": "Ser",
+        "homepage": "https://github.com/juzser",
+        "support": "https://github.com/juzser"
+    },
+    "name": "Pollr",
+    "nameSlug": "pollr",
+    "classFile": "PollrApp.ts",
+    "description": "create poll",
+    "implements": []
+}
