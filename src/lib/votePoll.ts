@@ -3,8 +3,10 @@ import { IModify, IPersistence, IRead } from '@rocket.chat/apps-engine/definitio
 import { createPollBlocks } from './createPollBlocks';
 import { getPoll } from './getPoll';
 import { storeVote } from './storeVote';
+import { PollrApp } from '../../PollrApp';
 
-export async function votePoll({ data, read, persistence, modify }: {
+export async function votePoll({ app, data, read, persistence, modify }: {
+    app: PollrApp,
     data,
     read: IRead,
     persistence: IPersistence,
@@ -32,7 +34,7 @@ export async function votePoll({ data, read, persistence, modify }: {
 
     const showNames = await read.getEnvironmentReader().getSettings().getById('use-user-name');
 
-    const block = createPollBlocks(poll.question, poll.options, poll, showNames.value);
+    const block = createPollBlocks(app, poll.question, poll.options, poll, showNames.value);
 
     message.setBlocks(block);
 

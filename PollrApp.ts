@@ -49,7 +49,7 @@ export class PollrApp extends App {
         }
 
         try {
-            await createPollMessage(data, read, modify, persistence, data.user.id);
+            await createPollMessage(this, data, read, modify, persistence, data.user.id);
         } catch (err) {
             return context.getInteractionResponder().viewErrorResponse({
                 viewId: data.view.id,
@@ -71,7 +71,7 @@ export class PollrApp extends App {
 
         switch (data.actionId) {
             case 'vote': {
-                await votePoll({ data, read, persistence, modify });
+                await votePoll({ app: this, data, read, persistence, modify });
 
                 return {
                     success: true,
@@ -129,7 +129,7 @@ export class PollrApp extends App {
 
                 if (data.value === 'finish') {
                     try {
-                        await finishPollMessage({ data, read, persistence, modify });
+                        await finishPollMessage({ app: this, data, read, persistence, modify });
                     } catch (e) {
                         const { room } = context.getInteractionData();
                         const errorMessage = modify

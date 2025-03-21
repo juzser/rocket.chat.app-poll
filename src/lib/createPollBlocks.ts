@@ -2,9 +2,10 @@ import { IPoll } from '../IPoll';
 import { buildVoteGraph } from './buildVoteGraph';
 import { buildVoters } from './buildVoters';
 import { LayoutBlock, Option } from '@rocket.chat/ui-kit';
+import { PollrApp } from '../../PollrApp';
 
-export function createPollBlocks(question: string, options: Array<any>, poll: IPoll, showNames: boolean): LayoutBlock[] {
-    const overfloMenu: Option[] = [
+export function createPollBlocks(app: PollrApp, question: string, options: Array<any>, poll: IPoll, showNames: boolean): LayoutBlock[] {
+    const overflowMenu: Option[] = [
         {
             text: {
                 type: 'plain_text',
@@ -33,10 +34,10 @@ export function createPollBlocks(question: string, options: Array<any>, poll: IP
             },
             accessory: {
                 type: 'overflow',
-                appId: 'extraOptions',
+                appId: app.getID(),
                 blockId: 'extraOptions',
                 actionId: 'extraOptions',
-                options: overfloMenu,
+                options: overflowMenu,
             },
         }
     ];

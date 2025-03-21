@@ -7,8 +7,9 @@ import {
 
 import { IPoll } from '../IPoll';
 import { createPollBlocks } from './createPollBlocks';
+import { PollrApp } from '../../PollrApp';
 
-export async function createPollMessage(data: IUIKitViewSubmitIncomingInteraction, read: IRead, modify: IModify, persistence: IPersistence, uid: string) {
+export async function createPollMessage(app: PollrApp, data: IUIKitViewSubmitIncomingInteraction, read: IRead, modify: IModify, persistence: IPersistence, uid: string) {
     const { view: { id } } = data;
     const { state }: {
         state?: any;
@@ -63,7 +64,7 @@ export async function createPollMessage(data: IUIKitViewSubmitIncomingInteractio
             singleChoice: mode === 'single',
         };
 
-        const block = createPollBlocks(poll.question, options, poll, showNames.value);
+        const block = createPollBlocks(app, poll.question, options, poll, showNames.value);
 
         builder.setBlocks(block);
 

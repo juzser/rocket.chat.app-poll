@@ -4,6 +4,7 @@ import { RocketChatAssociationModel, RocketChatAssociationRecord } from '@rocket
 import { IPoll } from '../IPoll';
 import { createPollBlocks } from './createPollBlocks';
 import { getPoll } from './getPoll';
+import { PollrApp } from '../../PollrApp';
 
 async function finishPoll(poll: IPoll, { persis }: { persis: IPersistence }) {
     const association = new RocketChatAssociationRecord(RocketChatAssociationModel.MISC, poll.msgId);
@@ -11,7 +12,8 @@ async function finishPoll(poll: IPoll, { persis }: { persis: IPersistence }) {
     return persis.updateByAssociation(association, poll);
 }
 
-export async function finishPollMessage({ data, read, persistence, modify }: {
+export async function finishPollMessage({ app, data, read, persistence, modify }: {
+    app: PollrApp,
     data,
     read: IRead,
     persistence: IPersistence,
@@ -45,7 +47,7 @@ export async function finishPollMessage({ data, read, persistence, modify }: {
 
         const showNames = await read.getEnvironmentReader().getSettings().getById('use-user-name');
 
-        const block = createPollBlocks(poll.question, poll.options, poll, showNames.value);
+        const block = createPollBlocks(app, poll.question, poll.options, poll, showNames.value);
 
         message.setBlocks(block);
 
