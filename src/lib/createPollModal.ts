@@ -1,12 +1,14 @@
 import { IModify, IPersistence, IUIKitSurfaceViewParam } from '@rocket.chat/apps-engine/definition/accessors';
 import { RocketChatAssociationModel, RocketChatAssociationRecord } from '@rocket.chat/apps-engine/definition/metadata';
-
-import { IPoll } from './../IPoll';
-import { uuid } from './uuid';
 import { LayoutBlock } from '@rocket.chat/ui-kit';
 import { UIKitSurfaceType } from '@rocket.chat/apps-engine/definition/uikit';
 
-export async function createPollModal({ id = '', question, persistence, data, pollData, modify, options = 2 }: {
+import { IPoll } from './../IPoll';
+import { uuid } from './uuid';
+import { PollrApp } from '../../PollrApp';
+
+export async function createPollModal({ app, id = '', question, persistence, data, pollData, modify, options = 2 }: {
+    app: PollrApp,
     id?: string,
     question?: string,
     persistence: IPersistence,
@@ -24,7 +26,7 @@ export async function createPollModal({ id = '', question, persistence, data, po
         type: 'input',
         blockId: 'poll',
         element: {
-            appId: 'pollBlock',
+            appId: app.getID(),
             blockId: 'poll',
             type: 'plain_text_input',
             actionId: 'question',
@@ -46,7 +48,7 @@ export async function createPollModal({ id = '', question, persistence, data, po
             blockId: 'poll',
             optional: true,
             element: {
-                appId: 'pollBlock',
+                appId: app.getID(),
                 blockId: 'poll',
                 type: 'plain_text_input',
                 actionId: `option-${i}`,
@@ -68,7 +70,7 @@ export async function createPollModal({ id = '', question, persistence, data, po
         blockId: 'config',
         elements: [
             {
-                appId: 'pollBlock',
+                appId: app.getID(),
                 blockId: 'poll',
                 type: 'static_select',
                 placeholder: {
@@ -96,18 +98,18 @@ export async function createPollModal({ id = '', question, persistence, data, po
             },
             {
                 type: 'button',
-                appId: 'pollBlock',
+                appId: app.getID(),
                 blockId: 'poll',
                 actionId: 'addChoice',
                 text: {
                     type: 'plain_text',
                     text: 'Add a choice',
                 },
-                value: String(options + 1),
+                value: `${options + 1}`,
             },
             {
                 type: 'static_select',
-                appId: 'pollBlock',
+                appId: app.getID(),
                 blockId: 'poll',
                 actionId: 'visibility',
                 placeholder: {
@@ -144,7 +146,7 @@ export async function createPollModal({ id = '', question, persistence, data, po
         },
         submit: {
             type: 'button',
-            appId: 'pollBlock',
+            appId: app.getID(),
             blockId: 'poll',
             actionId: 'submit',
             text: {
@@ -154,7 +156,7 @@ export async function createPollModal({ id = '', question, persistence, data, po
         },
         close: {
             type: 'button',
-            appId: 'pollBlock',
+            appId: app.getID(),
             blockId: 'poll',
             actionId: 'cancel',
             text: {

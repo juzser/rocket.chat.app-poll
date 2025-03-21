@@ -39,8 +39,6 @@ export class PollrApp extends App {
             },
         } = data.view as any;
 
-        this.getLogger().log('PollrApp.executeViewSubmitHandler', state);
-
         if (!state) {
             return context.getInteractionResponder().viewErrorResponse({
                 viewId: data.view.id,
@@ -67,6 +65,10 @@ export class PollrApp extends App {
     public async executeBlockActionHandler(context: UIKitBlockInteractionContext, read: IRead, http: IHttp, persistence: IPersistence, modify: IModify) {
         const data = context.getInteractionData();
 
+        this.getLogger().log('executeBlockActionHandler', data);
+
+        this.getLogger().log('executeBlockActionHandler', data.actionId);
+
         switch (data.actionId) {
             case 'vote': {
                 await votePoll({ data, read, persistence, modify });
@@ -77,13 +79,13 @@ export class PollrApp extends App {
             }
 
             case 'create': {
-                const modal = await createPollModal({ data, persistence, modify });
+                const modal = await createPollModal({ app: this, data, persistence, modify });
 
                 return context.getInteractionResponder().openModalViewResponse(modal);
             }
 
             case 'addChoice': {
-                const modal = await createPollModal({ id: data.container.id, data, persistence, modify, options: parseInt(String(data.value), 10) });
+                const modal = await createPollModal({ app: this, id: data.container.id, data, persistence, modify, options: parseInt(String(data.value), 10) });
 
                 return context.getInteractionResponder().updateModalViewResponse(modal);
             }
@@ -95,6 +97,7 @@ export class PollrApp extends App {
                         const pollData = await getPoll(String(msgId), read);
 
                         const modal = await createPollModal({
+                            app: this,
                             question: pollData.question,
                             data,
                             persistence,
@@ -158,7 +161,7 @@ export class PollrApp extends App {
     }
 
     public async initialize(configuration: IConfigurationExtend): Promise<void> {
-        await configuration.slashCommands.provideSlashCommand(new PollCommand());
+        await configuration.slashCommands.provideSlashCommand(new PollCommand(this));
         await configuration.settings.provideSetting({
             id : 'use-user-name',
             i18nLabel: 'Use name attribute to display voters, instead of username',
